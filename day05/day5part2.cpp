@@ -35,9 +35,14 @@ int main(int argc, char** argv) {
     int num = stoi(numStr);
     int fromStack = stoi(fromStackStr);
     int toStack = stoi(toStackStr);
+    std::stack<char> tempStack;
     for (int i = 0; i < num; i++) {
-      stacks.at(toStack - 1).push(stacks.at(fromStack - 1).top());
+      tempStack.push(stacks.at(fromStack - 1).top());
       stacks.at(fromStack - 1).pop();
+    }
+    for (int i = 0; i < num; i++) {
+      stacks.at(toStack - 1).push(tempStack.top());
+      tempStack.pop();
     }
   }
   for (int i = 0; i < stacks.size(); i++) {
