@@ -14,6 +14,7 @@ bool notTouching(pairs headPos, pairs tailPos) {
   }
   return false;
 }
+
 bool inLine(pairs headPos, pairs tailPos) {
   if (headPos.first == tailPos.first || headPos.second == tailPos.second) {
     return true;
@@ -23,21 +24,12 @@ bool inLine(pairs headPos, pairs tailPos) {
 
 int main() {
   std::ifstream file("day9.txt");
-
   pairs headPos = std::make_pair(0, 0);
-  pairs knot1Pos = std::make_pair(0, 0);
-  pairs knot2Pos = std::make_pair(0, 0);
-  pairs knot3Pos = std::make_pair(0, 0);
-  pairs knot4Pos = std::make_pair(0, 0);
-  pairs knot5Pos = std::make_pair(0, 0);
-  pairs knot6Pos = std::make_pair(0, 0);
-  pairs knot7Pos = std::make_pair(0, 0);
-  pairs knot8Pos = std::make_pair(0, 0);
   pairs tailPos = std::make_pair(0, 0);
-
   std::set<pairs> visited;
   visited.insert(tailPos);
   std::string line;
+
   while (getline(file, line)) {
     std::stringstream ss(line);
     std::string direction;
@@ -96,5 +88,6 @@ int main() {
       }
     }
   }
+
   std::cout << visited.size() << "\n";
 }
