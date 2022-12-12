@@ -35,33 +35,33 @@ void moveKnots(std::vector<pairs>& knots) {
         knots.at(i + 1).first++;
       }
     } else if (notTouching(knots.at(i), knots.at(i + 1))) {
-      if (knots.at(i + 1).first == knots.at(i).first - 1) {
-        knots.at(i + 1).first = knots.at(i).first;
+      if (knots.at(i + 1).first < knots.at(i).first) {
+        knots.at(i + 1).first++;
         if (knots.at(i + 1).second < knots.at(i).second) {
-          knots.at(i + 1).second = knots.at(i).second - 1;
+          knots.at(i + 1).second++;
         } else {
-          knots.at(i + 1).second = knots.at(i).second + 1;
+          knots.at(i + 1).second--;
         }
-      } else if (knots.at(i + 1).second == knots.at(i).second - 1) {
-        knots.at(i + 1).second = knots.at(i).second;
+      } else if (knots.at(i + 1).second < knots.at(i).second) {
+        knots.at(i + 1).second++;
         if (knots.at(i + 1).first < knots.at(i).first) {
-          knots.at(i + 1).first = knots.at(i).first - 1;
+          knots.at(i + 1).first++;
         } else {
-          knots.at(i + 1).first = knots.at(i).first + 1;
+          knots.at(i + 1).first--;
         }
-      } else if (knots.at(i + 1).first == knots.at(i).first + 1) {
-        knots.at(i + 1).first = knots.at(i).first;
+      } else if (knots.at(i + 1).first > knots.at(i).first) {
+        knots.at(i + 1).first--;
         if (knots.at(i + 1).second < knots.at(i).second) {
-          knots.at(i + 1).second = knots.at(i).second - 1;
+          knots.at(i + 1).second++;
         } else {
-          knots.at(i + 1).second = knots.at(i).second + 1;
+          knots.at(i + 1).second--;
         }
-      } else if (knots.at(i + 1).second == knots.at(i).second + 1) {
-        knots.at(i + 1).second = knots.at(i).second;
+      } else if (knots.at(i + 1).second > knots.at(i).second) {
+        knots.at(i + 1).second--;
         if (knots.at(i + 1).first < knots.at(i).first) {
-          knots.at(i + 1).first = knots.at(i).first - 1;
+          knots.at(i + 1).first++;
         } else {
-          knots.at(i + 1).first = knots.at(i).first + 1;
+          knots.at(i + 1).first--;
         }
       }
     }
@@ -112,6 +112,5 @@ int main() {
       }
     }
   }
-
   std::cout << visited.size() << "\n";
 }
