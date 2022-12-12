@@ -22,12 +22,60 @@ bool inLine(pairs headPos, pairs tailPos) {
   return false;
 }
 
+void moveKnots(std::vector<pairs>& knots) {
+  for (int i = 0; i < 9; i++) {
+    if (inLine(knots.at(i), knots.at(i + 1))) {
+      if (knots.at(i).second == knots.at(i + 1).second + 2) {
+        knots.at(i + 1).second++;
+      } else if (knots.at(i).second == knots.at(i + 1).second - 2) {
+        knots.at(i + 1).second--;
+      } else if (knots.at(i).first == knots.at(i + 1).first - 2) {
+        knots.at(i + 1).first--;
+      } else if (knots.at(i).first == knots.at(i + 1).first + 2) {
+        knots.at(i + 1).first++;
+      }
+    } else if (notTouching(knots.at(i), knots.at(i + 1))) {
+      if (knots.at(i + 1).first == knots.at(i).first - 1) {
+        knots.at(i + 1).first = knots.at(i).first;
+        if (knots.at(i + 1).second < knots.at(i).second) {
+          knots.at(i + 1).second = knots.at(i).second - 1;
+        } else {
+          knots.at(i + 1).second = knots.at(i).second + 1;
+        }
+      } else if (knots.at(i + 1).second == knots.at(i).second - 1) {
+        knots.at(i + 1).second = knots.at(i).second;
+        if (knots.at(i + 1).first < knots.at(i).first) {
+          knots.at(i + 1).first = knots.at(i).first - 1;
+        } else {
+          knots.at(i + 1).first = knots.at(i).first + 1;
+        }
+      } else if (knots.at(i + 1).first == knots.at(i).first + 1) {
+        knots.at(i + 1).first = knots.at(i).first;
+        if (knots.at(i + 1).second < knots.at(i).second) {
+          knots.at(i + 1).second = knots.at(i).second - 1;
+        } else {
+          knots.at(i + 1).second = knots.at(i).second + 1;
+        }
+      } else if (knots.at(i + 1).second == knots.at(i).second + 1) {
+        knots.at(i + 1).second = knots.at(i).second;
+        if (knots.at(i + 1).first < knots.at(i).first) {
+          knots.at(i + 1).first = knots.at(i).first - 1;
+        } else {
+          knots.at(i + 1).first = knots.at(i).first + 1;
+        }
+      }
+    }
+  }
+}
+
 int main() {
   std::ifstream file("day9.txt");
-  pairs headPos = std::make_pair(0, 0);
-  pairs tailPos = std::make_pair(0, 0);
+  std::vector<pairs> knots;
+  for (int i = 0; i < 10; i++) {
+    knots.push_back(std::make_pair(0, 0));
+  }
   std::set<pairs> visited;
-  visited.insert(tailPos);
+  visited.insert(knots.at(9));
   std::string line;
 
   while (getline(file, line)) {
@@ -40,51 +88,27 @@ int main() {
 
     if (direction.compare("U") == 0) {
       for (int i = 0; i < numSteps; i++) {
-        headPos.second++;
-        if (inLine(headPos, tailPos) && headPos.second == tailPos.second + 2) {
-          tailPos.second++;
-          visited.insert(tailPos);
-        } else if (notTouching(tailPos, headPos)) {
-          tailPos.second = headPos.second - 1;
-          tailPos.first = headPos.first;
-          visited.insert(tailPos);
-        }
+        knots.at(0).second++;
+        moveKnots(knots);
+        visited.insert(knots.at(9));
       }
     } else if (direction.compare("D") == 0) {
       for (int i = 0; i < numSteps; i++) {
-        headPos.second--;
-        if (inLine(headPos, tailPos) && headPos.second == tailPos.second - 2) {
-          tailPos.second--;
-          visited.insert(tailPos);
-        } else if (notTouching(headPos, tailPos)) {
-          tailPos.second = headPos.second + 1;
-          tailPos.first = headPos.first;
-          visited.insert(tailPos);
-        }
+        knots.at(0).second--;
+        moveKnots(knots);
+        visited.insert(knots.at(9));
       }
     } else if (direction.compare("L") == 0) {
       for (int i = 0; i < numSteps; i++) {
-        headPos.first--;
-        if (inLine(headPos, tailPos) && headPos.first == tailPos.first - 2) {
-          tailPos.first--;
-          visited.insert(tailPos);
-        } else if (notTouching(headPos, tailPos)) {
-          tailPos.first = headPos.first + 1;
-          tailPos.second = headPos.second;
-          visited.insert(tailPos);
-        }
+        knots.at(0).first--;
+        moveKnots(knots);
+        visited.insert(knots.at(9));
       }
     } else if (direction.compare("R") == 0) {
       for (int i = 0; i < numSteps; i++) {
-        headPos.first++;
-        if (inLine(headPos, tailPos) && headPos.first == tailPos.first + 2) {
-          tailPos.first++;
-          visited.insert(tailPos);
-        } else if (notTouching(headPos, tailPos)) {
-          tailPos.first = headPos.first - 1;
-          tailPos.second = headPos.second;
-          visited.insert(tailPos);
-        }
+        knots.at(0).first++;
+        moveKnots(knots);
+        visited.insert(knots.at(9));
       }
     }
   }
