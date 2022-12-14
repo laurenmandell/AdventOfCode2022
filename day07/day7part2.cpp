@@ -11,7 +11,13 @@ int main() {
   std::string line;
   std::string garbage;
   int deleteDirSize = 0;
-  int minDiff = 70000000;
+  int totalSpace = 70000000;
+  int minDiff = totalSpace;
+  int usedSpace = 41412830;
+  // found usedSpace by reading first element in curPath from day7part1.cpp
+  // this first element would be the outermost directory
+  int needToFree = 30000000 - (totalSpace - usedSpace);
+  // we need at least 30000000
   std::vector<dirs> curPath;
 
   while (getline(file, line)) {
@@ -24,9 +30,9 @@ int main() {
       if (dirName.compare("..") != 0) {
         curPath.push_back(std::make_pair(0, dirName));
       } else {
-        if (curPath.back().first >= 1412830 &&
-            curPath.back().first - 1412830 < minDiff) {
-          minDiff = curPath.back().first - 1412830;
+        if (curPath.back().first >= needToFree &&
+            curPath.back().first - needToFree < minDiff) {
+          minDiff = curPath.back().first - needToFree;
           deleteDirSize = curPath.back().first;
         }
         curPath.pop_back();
@@ -43,14 +49,12 @@ int main() {
   }
 
   for (int i = 0; i < curPath.size(); i++) {
-    if (curPath.back().first >= 1412830 &&
-        curPath.back().first - 1412830 < minDiff) {
-      minDiff = curPath.back().first - 1412830;
+    if (curPath.back().first >= needToFree &&
+        curPath.back().first - needToFree < minDiff) {
+      minDiff = curPath.back().first - needToFree;
       deleteDirSize = curPath.back().first;
     }
   }
 
   std::cout << deleteDirSize << "\n";
-  // used space is 41412830
-  // need to get rid of 1412830
 }
