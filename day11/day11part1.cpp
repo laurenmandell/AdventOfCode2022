@@ -76,7 +76,7 @@ int main() {
       for (int i = 0; i < 3; i++) {
         getline(ss3, garbage, ' ');
       }
-      getline(ss3, curDivisibleByStr, ' ');
+      getline(ss3, curDivisibleByStr, '\n');
       int curDivisibleBy = std::stoi(curDivisibleByStr);
       //  get if true
       getline(file, line);
@@ -93,7 +93,8 @@ int main() {
   int numRounds = 20;
   for (int r = 0; r < numRounds; r++) {
     for (int m = 0; m < monkeys.size(); m++) {
-      for (int i = 0; i < monkeys.at(m).getItems().size(); i++) {
+      int curNumItems = monkeys.at(m).getItems().size();
+      for (int i = 0; i < curNumItems; i++) {
         // monkey inspects item
         monkeys.at(m).incrementNumInspected();
         // get worry level
@@ -112,8 +113,7 @@ int main() {
             worryLevel *= worryLevel;
           }
         }
-        // divide by 3 and round to nearest int
-        worryLevel = worryLevel / 3.0 + 0.5;
+        worryLevel = worryLevel / 3;
         // do test
         if (worryLevel % monkeys.at(m).getDivisibleBy() == 0) {
           monkeys.at(monkeys.at(m).getTrueThrow()).addItem(worryLevel);
@@ -130,6 +130,7 @@ int main() {
   int secondMostInspected = 0;
   for (int i = 0; i < monkeys.size(); i++) {
     if (monkeys.at(i).getNumInspected() > mostInspected) {
+      secondMostInspected = mostInspected;
       mostInspected = monkeys.at(i).getNumInspected();
     } else if (monkeys.at(i).getNumInspected() > secondMostInspected) {
       secondMostInspected = monkeys.at(i).getNumInspected();
