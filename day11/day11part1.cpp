@@ -24,6 +24,8 @@ class Monkey {
   int getFalseThrow() { return falseThrow; }
   int getNumInspected() { return numInspected; }
   void incrementNumInspected() { numInspected++; }
+  void addItem(int worryLevel) { items.push_back(worryLevel); }
+  void removeItem() { items.erase(items.begin()); }
 
  private:
   std::vector<int> items;
@@ -88,17 +90,52 @@ int main() {
     }
   }
 
-  for (int i = 0; i < monkeys.size(); i++) {
-    for (int j = 0; j < monkeys.at(i).getItems().size(); j++) {
-      std::cout << monkeys.at(i).getItems().at(j) << ",";
+  int numRounds = 20;
+  for (int r = 0; r < numRounds; r++) {
+    for (int m = 0; m < monkeys.size(); m++) {
+      for (int i = 0; i < monkeys.at(m).getItems().size(); i++) {
+        // monkey inspects item
+        monkeys.at(m).incrementNumInspected();
+        // get worry level
+        int worryLevel = monkeys.at(m).getItems().front();
+        // calculate new worry level
+        if (monkeys.at(m).getOperation() == '+') {
+          if (monkeys.at(m).getOperationNum().compare("old") != 0) {
+            worryLevel += std::stoi(monkeys.at(m).getOperationNum());
+          } else {
+            worryLevel += worryLevel;
+          }
+        } else if (monkeys.at(m).getOperation() == '*') {
+          if (monkeys.at(m).getOperationNum().compare("old") != 0) {
+            worryLevel *= std::stoi(monkeys.at(m).getOperationNum());
+          } else {
+            worryLevel *= worryLevel;
+          }
+        }
+        // divide by 3 and round to nearest int
+        worryLevel = worryLevel / 3.0 + 0.5;
+        // do test
+        if (worryLevel % monkeys.at(m).getDivisibleBy() == 0) {
+          monkeys.at(monkeys.at(m).getTrueThrow()).addItem(worryLevel);
+        } else {
+          monkeys.at(monkeys.at(m).getFalseThrow()).addItem(worryLevel);
+        }
+        monkeys.at(m).removeItem();
+      }
     }
-    std::cout << "\n";
-    std::cout << monkeys.at(i).getOperation() << " "
-              << monkeys.at(i).getOperationNum();
-    std::cout << "\n";
-    std::cout << monkeys.at(i).getDivisibleBy() << "\n";
-    std::cout << monkeys.at(i).getTrueThrow() << "\n"
-              << monkeys.at(i).getFalseThrow() << "\n"
-              << "\n";
   }
+
+  // find the two most active monkeys
+  int mostInspected = 0;
+  int secondMostInspected = 0;
+  for (int i = 0; i < monkeys.size(); i++) {
+    if (monkeys.at(i).getNumInspected() > mostInspected) {
+      mostInspected = monkeys.at(i).getNumInspected();
+    } else if (monkeys.at(i).getNumInspected() > secondMostInspected) {
+      secondMostInspected = monkeys.at(i).getNumInspected();
+    }
+  }
+
+  // print level of monkey business
+  std::cout << mostInspected * secondMostInspected << "\n";
 }
