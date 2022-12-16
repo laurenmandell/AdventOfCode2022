@@ -49,7 +49,8 @@ int findFewestSteps(std::vector<std::vector<char>>& map, point start) {
       point top = point(topX, topY, p.getDistance() + 1);
       if (map[topY][topX] == 'E' && elevation >= 'y') {
         return top.getDistance();
-      } else if (map[topY][topX] <= elevation + 1) {
+      } else if ((map[topY][topX] <= elevation + 1) ||
+                 (map[topY][topX] == 'S' && 'a' <= elevation + 1)) {
         validSteps.push_back(top);
       }
     }
@@ -61,7 +62,8 @@ int findFewestSteps(std::vector<std::vector<char>>& map, point start) {
       point bot = point(botX, botY, p.getDistance() + 1);
       if (map[botY][botX] == 'E' && elevation >= 'y') {
         return bot.getDistance();
-      } else if (map[botY][botX] <= elevation + 1) {
+      } else if ((map[botY][botX] <= elevation + 1) ||
+                 (map[botY][botX] == 'S' && 'a' <= elevation + 1)) {
         validSteps.push_back(bot);
       }
     }
@@ -73,7 +75,8 @@ int findFewestSteps(std::vector<std::vector<char>>& map, point start) {
       point right = point(rightX, rightY, p.getDistance() + 1);
       if (map[rightY][rightX] == 'E' && elevation >= 'y') {
         return right.getDistance();
-      } else if (map[rightY][rightX] <= elevation + 1) {
+      } else if ((map[rightY][rightX] <= elevation + 1) ||
+                 (map[rightY][rightX] == 'S' && 'a' <= elevation + 1)) {
         validSteps.push_back(right);
       }
     }
@@ -85,7 +88,8 @@ int findFewestSteps(std::vector<std::vector<char>>& map, point start) {
       point left = point(leftX, leftY, p.getDistance() + 1);
       if (map[leftY][leftX] == 'E' && elevation >= 'y') {
         return left.getDistance();
-      } else if (map[leftY][leftX] <= elevation + 1) {
+      } else if ((map[leftY][leftX] <= elevation + 1) ||
+                 (map[leftY][leftX] == 'S' && 'a' <= elevation + 1)) {
         validSteps.push_back(left);
       }
     }
@@ -126,5 +130,22 @@ int main() {
     }
   }
 
-  std::cout << findFewestSteps(map, point(xStart, yStart, 0)) << "\n";
+  int fewestSteps = findFewestSteps(map, point(xStart, yStart, 0));
+
+  // part 2
+  int steps;
+  for (int i = 0; i < map.size(); i++) {
+    for (int j = 0; j < map.at(i).size(); j++) {
+      if (map[i][j] == 'a') {
+        xStart = j;
+        yStart = i;
+        steps = findFewestSteps(map, point(xStart, yStart, 0));
+        if (steps != -1 && steps < fewestSteps) {
+          fewestSteps = steps;
+        }
+      }
+    }
+  }
+
+  std::cout << fewestSteps << "\n";
 }
